@@ -2,6 +2,26 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 
+function shuffle(array) {
+    let counter = array.length;
+
+    // While there are elements in the array
+    while (counter > 0) {
+        // Pick a random index
+        let index = Math.floor(Math.random() * counter);
+
+        // Decrease counter by 1
+        counter--;
+
+        // And swap the last element with it
+        let temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+
+    return array;
+}
+
 class Card extends React.Component {
     render() {
         return (
@@ -17,7 +37,7 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cardvalues: Array(12).fill(0).map(function(k,ind){return Math.floor(ind/2)}),
+            cardvalues: shuffle(Array(12).fill(0).map(function(k,ind){return Math.floor(ind/2)})),
             cards: Array(12).fill(false),
             player1Turn: true,
             chosen: Array(2).fill(-1),
@@ -25,37 +45,39 @@ class Board extends React.Component {
         };
     }
     handleClick(i) {
-        const cards = this.state.cards.slice();
-        const curchosen = this.state.chosen.slice();
-        const newscores = this.state.scores.slice();
-        if (curchosen[0] === -1) {
-            curchosen[0] = i
-            cards[i] = !cards[i];
-            this.setState({cards:cards, chosen: curchosen});
-        } 
-        else if (curchosen[1] === -1){
-            curchosen[1] = i
-            cards[i] = !cards[i]
-            this.setState({cards: cards, chosen: curchosen});  //show cards
-            //alert(curchosen)
-            if (this.state.cardvalues[curchosen[0]] === this.state.cardvalues[curchosen[1]]) {
-                if (this.state.player1Turn) {
-                    newscores[0] = newscores[0]+1
+        if (!this.state.cards[i]) {
+            const cards = this.state.cards.slice();
+            const curchosen = this.state.chosen.slice();
+            const newscores = this.state.scores.slice();
+            if (curchosen[0] === -1) {
+                curchosen[0] = i
+                cards[i] = !cards[i];
+                this.setState({cards:cards, chosen: curchosen});
+            } 
+            else if (curchosen[1] === -1){
+                curchosen[1] = i
+                cards[i] = !cards[i]
+                this.setState({cards: cards, chosen: curchosen});  //show cards
+                //alert(curchosen)
+                if (this.state.cardvalues[curchosen[0]] === this.state.cardvalues[curchosen[1]]) {
+                    if (this.state.player1Turn) {
+                        newscores[0] = newscores[0]+1
+                    } else {
+                        newscores[1] = newscores[1]+1
+                    } 
+                    this.setState({chosen: Array(2).fill(-1),scores: newscores});
                 } else {
-                    newscores[1] = newscores[1]+1
-                } 
-                this.setState({chosen: Array(2).fill(-1),scores: newscores});
-            } else {
-                const updatecards = cards.slice();
-                for(var k = 0; k < curchosen.length; k++) {
-                    updatecards[curchosen[k]] = !updatecards[curchosen[k]];  //reflip cards
-                }
-                this.setState({chosen: Array(2).fill(-1), player1Turn: !this.state.player1Turn});
-                setTimeout(() => this.setState({cards: updatecards}),1000);  //make cards go away 
-            };
+                    const updatecards = cards.slice();
+                    for(var k = 0; k < curchosen.length; k++) {
+                        updatecards[curchosen[k]] = !updatecards[curchosen[k]];  //reflip cards
+                    }
+                    this.setState({chosen: Array(2).fill(-1), player1Turn: !this.state.player1Turn});
+                    setTimeout(() => this.setState({cards: updatecards}),1000);  //make cards go away 
+                };
+            }
         }
     }
-    renderCard(i,f) {
+    renderCard(i) {
         return ( <Card 
             value = {this.state.cardvalues[i]}
             flipstate = {this.state.cards[i]}
@@ -71,22 +93,22 @@ class Board extends React.Component {
             <div>
                 <div className = "status">{status}</div>
                 <div className = "board-row">
-                    {this.renderCard(0,false)}
-                    {this.renderCard(1,false)}
-                    {this.renderCard(2,false)}
-                    {this.renderCard(3,false)}
+                    {this.renderCard(0)}
+                    {this.renderCard(1)}
+                    {this.renderCard(2)}
+                    {this.renderCard(3)}
                 </div>
                 <div className = "board-row">
-                    {this.renderCard(4,false)}
-                    {this.renderCard(5,false)}
-                    {this.renderCard(6,false)}
-                    {this.renderCard(7,false)}
+                    {this.renderCard(4)}
+                    {this.renderCard(5)}
+                    {this.renderCard(6)}
+                    {this.renderCard(7)}
                 </div>
                 <div className = "board-row">
-                    {this.renderCard(8,false)}
-                    {this.renderCard(9,false)}
-                    {this.renderCard(10,false)}
-                    {this.renderCard(11,false)}
+                    {this.renderCard(8)}
+                    {this.renderCard(9)}
+                    {this.renderCard(10)}
+                    {this.renderCard(11)}
                 </div>
                 <div className = "scores">{score1}</div>
                 <div className = "scores">{score2}</div>
