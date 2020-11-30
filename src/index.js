@@ -7,7 +7,7 @@ class Card extends React.Component {
         return (
             <button className = "card" 
              onClick = {() => this.props.onClick()}>
-                {this.props.value}
+                {this.props.flipstate ? this.props.value : null}
             </button>
         );
     }
@@ -17,6 +17,7 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            cardvalues: Array(12).fill(0),
             cards: Array(12).fill(false),
         };
     }
@@ -25,9 +26,10 @@ class Board extends React.Component {
         cards[i] = !cards[i];
         this.setState({cards: cards});
     }
-    renderCard(i) {
+    renderCard(i,f) {
         return ( <Card 
-            value = {i}
+            value = {this.state.cardvalues[i]}
+            flipstate = {this.state.cards[i]}
             onClick = {() => this.handleClick(i)}
         />);
     }
@@ -40,22 +42,22 @@ class Board extends React.Component {
             <div>
                 <div className = "status">{status}</div>
                 <div className = "board-row">
-                    {this.renderCard(0)}
-                    {this.renderCard(1)}
-                    {this.renderCard(4)}
-                    {this.renderCard(3)}
+                    {this.renderCard(0,false)}
+                    {this.renderCard(1,false)}
+                    {this.renderCard(2,false)}
+                    {this.renderCard(3,false)}
                 </div>
                 <div className = "board-row">
-                    {this.renderCard(0)}
-                    {this.renderCard(1)}
-                    {this.renderCard(3)}
-                    {this.renderCard(2)}
+                    {this.renderCard(4,false)}
+                    {this.renderCard(5,false)}
+                    {this.renderCard(6,false)}
+                    {this.renderCard(7,false)}
                 </div>
                 <div className = "board-row">
-                    {this.renderCard(5)}
-                    {this.renderCard(2)}
-                    {this.renderCard(4)}
-                    {this.renderCard(5)}
+                    {this.renderCard(8,false)}
+                    {this.renderCard(9,false)}
+                    {this.renderCard(10,false)}
+                    {this.renderCard(11,false)}
                 </div>
                 <div className = "scores">{score1}</div>
                 <div className = "scores">{score2}</div>
