@@ -17,7 +17,7 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cardvalues: Array(12).fill(0),
+            cardvalues: Array(12).fill(0).map(function(k,ind){return Math.floor(ind/2)}),
             cards: Array(12).fill(false),
         };
     }
